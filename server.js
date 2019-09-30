@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * Dependencies
@@ -11,9 +11,6 @@ const express = require('express');
 const methodOverride = require('method-override');
 const pg = require('pg');
 
-// Get local packages
-const Error = require('./modules/error');
-const Router = require('./modules/router');
 
 // Set PostgreSQL database client
 const pgClient = new pg.Client(process.env.DATABASE_URL);
@@ -34,15 +31,58 @@ app.use(methodOverride((req, res) => {
 }));
 app.set('view engine', 'ejs');
 
-// Set local packages
-const router = new Router(pgClient);
 
-/**
- * Routes
- */
+//========= Routes =========//
+// Home page, month Calendar
+app.get('/', calendar());
+// View one specific day, and show holidays for that day
+app.post('/:day_num', getOneDayHolidays());
+// Add a new holiday for specified day
+app.post('/:day_num/add', addHoliday());
+// Change or delete a holiday from specified day.
+app.post('/:day_num/change', editOrDeleteHoliday());
 
-app.get('/', (req, res) => router.service('calendar', req, res));
-app.use('*', (req, res) => router.wildcard(req, res));
+//catch-all for unspecified routes
+app.use('*', wildcard())
+
+
+
+
+// Constructor Functions
+function Holiday(data){
+    this.name = data.name,
+    this.month = data.month,
+    this.year = data.year,
+    this.day = data.day,
+    this.type = data.type,
+    this.description = data.description,
+}
+
+
+
+
+
+
+
+function calendar(request, response){
+//find all things for specified month
+
+  let month = 'still need to create functionality to specify today\'s month';
+  let sql = `SELECT * FROM holidays WHERE month = ${month}`
+  pgClient.query(sql).then(sqlResults => {
+
+    response.send(sqlResults)
+  })
+
+}
+
+
+
+
+
+
+
+
 
 /**
  * Port
