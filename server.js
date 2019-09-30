@@ -40,7 +40,8 @@ app.post('/:day_num', getOneDayHolidays());
 // Add a new holiday for specified day
 app.post('/:day_num/add', addHoliday());
 // Change or delete a holiday from specified day.
-app.post('/:day_num/change', editOrDeleteHoliday());
+// app.post('/:day_num/change', editOrDeleteHoliday());
+app.post('/:day_num/update', updateHolidayInfo());
 
 //catch-all for unspecified routes
 app.use('*', wildcard())
@@ -86,7 +87,7 @@ function addHoliday(request, response){
   //line 87 may not work, depending on how the data is received
   const day_num = request.params.body.day;
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5);'
-  
+
   //insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
   const insertArray = [formdata.name, formdata.month, formdata.year, formdata.day, formdata.type, formdata.description];
 
@@ -95,7 +96,18 @@ function addHoliday(request, response){
   })
 }
 
+function updateHolidayInfo(request, response){
+  //line 101 may be incorrect, depending on how the data is received
+  const day_num = request.params.body.day
 
+  //this line may not work, depends on how we are receiving the data from form
+  const updatedInfo = request.body
+  //not sure how to capture the month/year from all of this
+  const sqlUpdatestatment = 'UPDATE holidays SET name=$1, day=$2, type=$3, description=$4'
+  const sqlUpdateArray = [updatedInfo.name, day_num, updatedInfo.type, updatedInfo.description]
+
+  
+}
 
 
 
