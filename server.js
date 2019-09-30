@@ -92,7 +92,7 @@ function addHoliday(request, response){
   const insertArray = [formdata.name, formdata.month, formdata.year, formdata.day, formdata.type, formdata.description];
 
   pgClient.query(sqlInsert, insertArray).then(oneDayHolidays => {
-    response.render('/newHoliday', {oneDayHolidays :day_num})
+    response.render('/oneDay', {oneDayHolidays : day_num})
   })
 }
 
@@ -105,6 +105,13 @@ function updateHolidayInfo(request, response){
   //not sure how to capture the month/year from all of this
   const sqlUpdatestatment = 'UPDATE holidays SET name=$1, day=$2, type=$3, description=$4'
   const sqlUpdateArray = [updatedInfo.name, day_num, updatedInfo.type, updatedInfo.description]
+
+
+  //save updated information to the database
+  pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(updatedInfo => {
+  
+    response.redirect(`/${day_num}`)
+  })
 
   
 }
