@@ -2,22 +2,27 @@
 <html lang="en">
 
 <head>
-    <%- include('./partials/head.ejs')
+    <%- includes('./partials/head.ejs') %>
 </head>
 
 <body>
-  <header>
-    <%- include('.partials/header.ejs')
-  </header>
-  
-  <main>
-    <h2></h2>
- 
-  </main>
+    <header>
+        <%- includes('./partials/header.ejs') %>
+    </header>
 
-  <footer>
-    <%- .include('.partials/footer.ejs')
-  </footer>
+    <main>
+        <h2></h2>
+
+        <% eachDay.forEach( dateDisplayed => {) %>
+            <section class="days">
+                <%- includes('./partials/days.ejs) %>
+            </section>
+            <% } %>
+    </main>
+
+    <footer>
+        <%- includes('.partials/footer.ejs') %>
+    </footer>
 
 </body>
 
