@@ -69,12 +69,26 @@ function calendar(request, response){
 
   let month = 'still need to create functionality to specify today\'s month';
   let sql = `SELECT * FROM holidays WHERE month = ${month}`
-  pgClient.query(sql).then(sqlResults => {
+  pgClient.query(sql).then(oneMonthHolidays => {
 
-    response.send(sqlResults)
+    response.send(oneMonthHolidays);
   })
+}
+
+
+
+function getOneDayHolidays(params, request, response){
+    //line 82 may not work, depending on how the data is received
+    let day_num = params.body.day;
+
+
+
+
 
 }
+
+
+
 
 
 
