@@ -25,7 +25,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('./pubic'));
+app.use('/public', express.static('public'));
+
 app.use(methodOverride((req, res) => {
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     const method = req.body._method;
