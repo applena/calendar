@@ -13,8 +13,13 @@ main {
   grid-template-rows: repeat(42, 250px);
 }
 
-.website_header {
+.copyright {
+  line-height: 100%;
+}
+
+.website_header_footer {
   background-color: green;
+  height: 60px;
   padding: 10px;
 }
 
