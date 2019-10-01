@@ -59,8 +59,8 @@ app.use('*', wildcard())
 
 
 
-function calendar(request, response){
-//find all things for specified month
+function calendar(request, response) {
+  //find all things for specified month
 
   let month = 'still need to create functionality to specify today\'s month';
   let sql = `SELECT * FROM holidays WHERE month=${month}`
@@ -80,10 +80,11 @@ function getOneDayHolidays(request, response){
   pgClient.query(sql, [day_num]).then(oneDayHolidays => {
 
     response.render('/oneDay', {oneDayHolidays: oneDayHolidays.rows})
+
   })
 }
 
-function addHoliday(request, response){
+function addHoliday(request, response) {
   // adds an event to the selected day
   //line 87 may not work, depending on how the data is received
   const day_num = request.params.body.day;
@@ -94,6 +95,7 @@ function addHoliday(request, response){
 
   pgClient.query(sqlInsert, queryArray).then(oneDayHolidays => {
     response.render('/oneDay', {oneDayHolidays : day_num})
+
   })
 }
 
