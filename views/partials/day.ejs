@@ -1,15 +1,17 @@
 <h2>
-    <% oneMonthHolidays.forEach (date =>{ %>
-        <%= getDate() %>
+    <% days.forEach (date =>{ %>
+        <%= date.getDate() %>
             <% }) %>
 </h2>
 <div>
     <% oneMonthHolidays.forEach (dayDisplayed =>{ %>
-
+        <p>
+            <% dayDisplayed.holiday.</p>
         <form action="/:day_num" method="POST">
             <input type="text" value="<%= dayDisplayed %>">
-        </form>
-        <% }) %>
+
+                </form>
+                <% }) %>
 </div>
 
 <!-- <% oneMonthHolidays.forEach( dateDisplayed => {) %>
