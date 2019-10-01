@@ -25,7 +25,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('./pubic'));
+app.use('/public', express.static('public'))
 app.use(methodOverride((req, res) => {
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     const method = req.body._method;
@@ -125,11 +125,8 @@ function getCalendar(req, res) {
     .catch(err => new Error(err).exit(res));
 }
 
-<<<<<<< HEAD
-// app.use('*', wildcard())
-=======
+
 // app.use('*', wildcard);
->>>>>>> 7a34d869a527cc4a91cb5ca21e7a29f5532c9f7b
 
 
 function getOneDayHolidays(request, response) {
@@ -148,6 +145,7 @@ function addHoliday(request, response) {
   // adds an event to the selected day
   //line 87 may not work, depending on how the data is received
   const day_num = request.params.body.day;
+
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5);'
 
   //insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
@@ -185,9 +183,7 @@ function updateHolidayInfo(request, response) {
   const sqlUpdateArray = [updatedInfo.name, day_num, updatedInfo.type, updatedInfo.description]
 
   //save updated information to the database
-  pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(updatedInfo => {
-    response.redirect(`/${day_num}`)
-  })
+  pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(response.redirect(`/${day_num}`))
 }
 
 /**
