@@ -13,6 +13,11 @@ main {
   grid-template-rows: repeat(42, 250px);
 }
 
+.website_header {
+  background-color: green;
+  padding: 10px;
+}
+
 /* Tablet, & Desktop */
 
 @media only screen and (min-width: 768px) {
