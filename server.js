@@ -124,18 +124,7 @@ function getCalendar(req, res) {
     .catch(err => new Error(err).exit(res));
 }
 
-app.use('*', wildcard())
-
-
-
-
-
-
-
-
-
-
-
+// app.use('*', wildcard())
 
 function calendar(request, response) {
   //find all things for specified month
@@ -147,7 +136,6 @@ function calendar(request, response) {
     response.send(oneMonthHolidays);
   })
 }
-
 
 function getOneDayHolidays(request, response) {
   //find all things for specified day
