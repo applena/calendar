@@ -51,7 +51,7 @@ app.post('/:day_num', getOneDayHolidays);
 // Add a new holiday for specified day
 app.post('/:day_num/add', addHoliday);
 // Render Update/Delete page
-app.post('/:day_num/change', changeHolidayInfo);
+app.get('/:day_num/change', changeHolidayInfo);
 // Update existing Holiday
 app.post('/:day_num/update', updateHolidayInfo);
 // Delete existing Holiday
@@ -166,7 +166,7 @@ function changeHolidayInfo(request, response) {
     let holidayResults = singleHoliday.rows[0];
 
     //render editHoliday.ejs, send information from db
-    response.render('/editHoliday', { infoToUpdate: holidayResults })
+    response.render('./pages/editHoliday', { infoToUpdate: holidayResults })
   })
 }
 
