@@ -1,19 +1,16 @@
-<h2>
-    <% days.forEach(date => { %>
-        <%= date.getDate() %>
-    <% }) %>
-</h2>
-<div>
-    <% oneMonthHolidays.forEach(dayDisplayed => { %>
-        <p><% dayDisplayed.holiday.</p>
-        <form action="/:day_num" method="POST">
-            <input type="text" value="<%= dayDisplayed %>">
-        </form>
-    <% }) %>
-</div>
+<% days.forEach(day => { %>
+    <div>
 
-<!-- <% oneMonthHolidays.forEach( dateDisplayed => {) %>
-  <section class="days">
-      <%- includes('./partials/days.ejs) %>
-  </section>
-  <% } %> -->
+        <a href="/:`${day_num}`" class="days">
+
+            <h2>
+                <%= day.date %>
+            </h2>
+            <p>
+                <%= day.holiday %>
+            </p>
+
+        </a>
+
+    </div>
+    <% }) %>

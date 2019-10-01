@@ -10,5 +10,5 @@ CREATE TABLE holidays (
   year INTEGER,
   day INTEGER,
   type VARCHAR(255),
-  description VARCHAR(255)
+  description VARCHAR(500)
 );
