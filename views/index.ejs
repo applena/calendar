@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+    <header>
+    </header>
+
+    <main>
+        <% days.forEach(day => { %>
+        <section class="days">
+            <h2>><%= day.date %></h2>
+            <p><%= day.holiday %></p>
+        </section>
+        <% }) %>
+    </main>
+
+    <footer>
+    </footer>
+
+</body>
+
+</html>

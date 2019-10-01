@@ -46,5 +46,22 @@ Calendar.prototype.getHolidays = function(req, res) {
   //   Read DB for Holidays,
   //   Return Holidays with id to client.
 
-  res.status(200).send('Hello world');
+  // Read DB for Holidays
+  self.db.readDB()
+    .then(() => {
+      // If Holidays in DB and Holidays are for current month return Holidays to client
+
+      // Else read Calendarific API holidays data to Holidays
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      self.api.readAPI(year, month)
+        .then(holidays => {
+          console.log(holidays)
+        })
+        .catch(err => new Error(err).exit(res));
+    })
+    .catch(err => new Error(err).exit(res));
+
+  // res.status(200).send('Hello world');
 };
