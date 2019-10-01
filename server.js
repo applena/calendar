@@ -163,7 +163,7 @@ function changeHolidayInfo(request, response) {
   const queryStatement = 'SELECT * FROM holidays WHERE name=$1;'
   const queryArrayData = [specificDayHolidaydata.name]
   pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
-    let holidayResults = singleHoliday.rows
+    let holidayResults = singleHoliday.rows[0];
 
     //render editHoliday.ejs, send information from db
     response.render('/editHoliday', { infoToUpdate: holidayResults })
