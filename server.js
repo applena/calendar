@@ -64,7 +64,7 @@ function calendar(request, response){
   let sql = `SELECT * FROM holidays WHERE month = ${month}`
   pgClient.query(sql).then(oneMonthHolidays => {
 
-    response.send(oneMonthHolidays);
+    response.send(oneMonthHolidays.rows);
   })
 }
 
@@ -89,9 +89,9 @@ function addHoliday(request, response){
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5);'
 
   //insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
-  const insertArray = [formdata.name, formdata.month, formdata.year, formdata.day, formdata.type, formdata.description];
+  const queryArray = [formdata.name, formdata.month, formdata.year, formdata.day, formdata.type, formdata.description];
 
-  pgClient.query(sqlInsert, insertArray).then(oneDayHolidays => {
+  pgClient.query(sqlInsert, queryArray).then(oneDayHolidays => {
     response.render('/oneDay', {oneDayHolidays : day_num})
   })
 }
