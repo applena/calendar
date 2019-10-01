@@ -6,7 +6,7 @@
 <div>
     <% oneMonthHolidays.forEach(dayDisplayed => { %>
         <p><% dayDisplayed.holiday.</p>
-        <form action="/:day_num" method="POST">
+        <form action="/`${day_num}`" method="POST">
             <input type="text" value="<%= dayDisplayed %>">
         </form>
     <% }) %>

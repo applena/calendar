@@ -46,15 +46,15 @@ const db = new DB(pgClient);
 // Home page, month Calendar
 app.get('/', getCalendar);
 // View one specific day, and show holidays for that day
-app.post('/:day_num', getOneDayHolidays());
-// Add a new holiday for specified day
-app.post('/:day_num/add', addHoliday());
-// Render Update/Delete page
-app.post('/:day_num/change', changeHolidayInfo())
-// Update existing Holiday
-app.post('/:day_num/update', updateHolidayInfo());
-// Delete existing Holiday
-app.delete('/:day_num/delete')
+// app.post('/:day_num', getOneDayHolidays());
+// // Add a new holiday for specified day
+// app.post('/:day_num/add', addHoliday());
+// // Render Update/Delete page
+// app.post('/:day_num/change', changeHolidayInfo())
+// // Update existing Holiday
+// app.post('/:day_num/update', updateHolidayInfo());
+// // Delete existing Holiday
+// app.delete('/:day_num/delete')
 
 //catch-all for unspecified routes
 // app.use('*', wildcard())
