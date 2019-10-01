@@ -39,10 +39,12 @@ app.get('/', calendar());
 app.post('/:day_num', getOneDayHolidays());
 // Add a new holiday for specified day
 app.post('/:day_num/add', addHoliday());
-// Change or delete a holiday from specified day.
-// app.post('/:day_num/change', editOrDeleteHoliday());
+// Render Update/Delete page
+app.post('/:day_num/change', changeHolidayInfo())
+// Update existing Holiday
 app.post('/:day_num/update', updateHolidayInfo());
-
+// Delete existing Holiday
+app.delete('/:day_num/delete')
 //catch-all for unspecified routes
 app.use('*', wildcard())
 
@@ -61,7 +63,7 @@ function calendar(request, response){
 //find all things for specified month
 
   let month = 'still need to create functionality to specify today\'s month';
-  let sql = `SELECT * FROM holidays WHERE month = ${month}`
+  let sql = `SELECT * FROM holidays WHERE month=${month}`
   pgClient.query(sql).then(oneMonthHolidays => {
 
     response.send(oneMonthHolidays.rows);
@@ -74,11 +76,10 @@ function getOneDayHolidays(request, response){
 
   //line 82 may not work, depending on how the data is received
   const day_num = request.params.body.day;
-  let sql = `SELECT * FROM holidays WHERE day = ${day_num}`;
+  let sql = `SELECT * FROM holidays WHERE day=${day_num}`;
   pgClient.query(sql).then(oneDayHolidays => {
-    let eventsForDay = oneDayHolidays.rows
 
-    response.render('/oneDay', {oneDayHolidays: eventsForDay})
+    response.render('/oneDay', {oneDayHolidays: oneDayHolidays.rows})
   })
 }
 
@@ -96,6 +97,21 @@ function addHoliday(request, response){
   })
 }
 
+function changeHolidayInfo(request, response){
+  //identify which holiday user clicked on
+  const specificDayHolidaydata = request.body;
+  //select the information for selected holiday from db
+  const queryStatement = 'SELECT * FROM holidays WHERE name=$1;'
+  const queryArrayData = [specificDayHolidaydata.name]
+  pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
+    let holidayResults = singleHoliday.rows
+
+    //render editHoliday.ejs, send information from db
+    response.render('/editHoliday', {infoToUpdate:holidayResults})
+  })
+}
+
+
 function updateHolidayInfo(request, response){
   //line 101 may be incorrect, depending on how the data is received
   const day_num = request.params.body.day
@@ -109,11 +125,8 @@ function updateHolidayInfo(request, response){
 
   //save updated information to the database
   pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(updatedInfo => {
-  
     response.redirect(`/${day_num}`)
   })
-
-  
 }
 
 
