@@ -46,7 +46,7 @@ const db = new DB(pgClient);
 // Home page, month Calendar
 app.get('/', getCalendar);
 // View one specific day, and show holidays for that day
-// app.post('/:day_num', getOneDayHolidays());
+app.post('/:day_num', getOneDayHolidays());
 // Add a new holiday for specified day
 app.post('/:day_num/add', addHoliday());
 // Render Update/Delete page
@@ -130,17 +130,6 @@ function getCalendar(req, res) {
 
 // app.use('*', wildcard())
 
-function calendar(request, response) {
-  //find all things for specified month
-
-  let month = 'still need to create functionality to specify today\'s month';
-  let sql = `SELECT * FROM holidays WHERE month=${month}`
-  pgClient.query(sql).then(oneMonthHolidays => {
-
-    response.send(oneMonthHolidays.rows);
-  })
-}
-
 
 function getOneDayHolidays(request, response){
   //line below may not work, depending on how the data is received
@@ -149,7 +138,7 @@ function getOneDayHolidays(request, response){
   let sql = 'SELECT * FROM holidays WHERE day=$1';
   pgClient.query(sql, [day_num]).then(oneDayHolidays => {
 
-    response.render('/oneDay', {oneDayHolidays: oneDayHolidays.rows})
+    response.render('/oneDay', {dayDisplayed: oneDayHolidays.rows})
 
   })
 }

@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = Holiday;
 
 /**
@@ -9,11 +7,11 @@ module.exports = Holiday;
 /**
  * Holiday constructor
  */
-function Holiday(data){
-  this.name = data.name,
-  this.month = data.month,
-  this.year = data.year,
-  this.day = data.day,
-  this.type = data.type,
-  this.description = data.description
+function Holiday(rawHoliday) {
+  this.name = rawHoliday.name;
+  this.year = rawHoliday.date.datetime.year;
+  this.month = rawHoliday.date.datetime.month;
+  this.day = rawHoliday.date.datetime.day;
+  this.type = rawHoliday.type[0];
+  this.description = rawHoliday.description;
 }
