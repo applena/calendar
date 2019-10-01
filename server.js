@@ -72,12 +72,12 @@ function calendar(request, response){
 
 
 function getOneDayHolidays(request, response){
-  //find all things for specified day
-
-  //line 82 may not work, depending on how the data is received
+  //line below may not work, depending on how the data is received
   const day_num = request.params.body.day;
-  let sql = `SELECT * FROM holidays WHERE day=${day_num}`;
-  pgClient.query(sql).then(oneDayHolidays => {
+  
+  //find all things for specified day
+  let sql = 'SELECT * FROM holidays WHERE day=$1';
+  pgClient.query(sql, [day_num]).then(oneDayHolidays => {
 
     response.render('/oneDay', {oneDayHolidays: oneDayHolidays.rows})
   })
