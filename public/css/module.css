@@ -1,0 +1,17 @@
+
+.date_header {
+  font-size: 32pt;
+}
+
+.days {
+  background-color: lightblue;
+  border-radius: 20px;
+  color: #111;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.holiday_name {
+  font-size: 24pt;
+  vertical-align: bottom;
+}

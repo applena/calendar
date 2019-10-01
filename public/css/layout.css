@@ -1,0 +1,20 @@
+
+/* Mobile */
+
+main {
+  width: 80%;
+  margin: 40px auto;
+}
+
+.calendar {
+  display: grid;
+  grid-row-gap: 30px;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(42, 250px);
+}
+
+/* Tablet, & Desktop */
+
+@media only screen and (min-width: 768px) {
+
+}
