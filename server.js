@@ -116,9 +116,7 @@ function getCalendar(req, res) {
                 // Return Holidays with id to client
                 formatHolidays(holidays);
 
-                res.render('index', {
-                  days: days
-                });
+                res.render('index', { days: days });
               })
               .catch(err => new Error(err).exit(res));
           })
