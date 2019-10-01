@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- includes('./partials/head.ejs') %>
+</head>
+
+<body>
+    <header>
+        <%- includes('./partials/header.ejs') %>
+    </header>
+
+    <main>
+        <% oneMonthHolidays.forEach( dateDisplayed => {) %>
+            <section class="days">
+                <%- includes('./partials/days.ejs) %>
+            </section>
+            <% } %>
+    </main>
+
+    <footer>
+        <%- includes('.partials/footer.ejs') %>
+    </footer>
+
+</body>
+
+</html>
