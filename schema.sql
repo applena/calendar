@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS calendar;
-CREATE DATABASE calendar;
-\c calendar;
+-- DROP DATABASE IF EXISTS calendar;
+-- CREATE DATABASE calendar;
+-- \c calendar;
 
 DROP TABLE IF EXISTS holidays;
 CREATE TABLE holidays (
@@ -10,5 +10,5 @@ CREATE TABLE holidays (
   year INTEGER,
   day INTEGER,
   type VARCHAR(255),
-  description VARCHAR(255)
+  description VARCHAR(500)
 );

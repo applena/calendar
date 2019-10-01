@@ -2,24 +2,26 @@
 <html lang="en">
 
 <head>
-    <%- includes('./partials/head.ejs') %>
+    <%- include('./partials/head') %>
 </head>
 
 <body>
     <header>
-        <%- includes('./partials/header.ejs') %>
+        <%- include('./partials/header') %>
     </header>
 
     <main>
-        <% oneMonthHolidays.forEach( dateDisplayed => {) %>
-            <section class="days">
-                <%- includes('./partials/day.ejs) %>
-            </section>
-            <% } %>
+
+
+        <section class="days">
+            <%- include('./partials/day') %>
+
+        </section>
+
     </main>
 
     <footer>
-        <%- includes('.partials/footer.ejs') %>
+        <%- include('./partials/footer') %>
     </footer>
 
 </body>
