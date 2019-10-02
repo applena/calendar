@@ -159,11 +159,13 @@ function addHoliday(request, response) {
 function changeHolidayInfo(request, response) {
   //identify which holiday user clicked on
   const specificDayHolidaydata = request.body;
+  // console.log(request.body);
   //select the information for selected holiday from db
   const queryStatement = 'SELECT * FROM holidays WHERE name=$1;'
   const queryArrayData = [specificDayHolidaydata.name]
   pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
     let holidayResults = singleHoliday.rows[0];
+    // console.log(holidayResults);
 
     //render editHoliday.ejs, send information from db
     response.render('./pages/editHoliday', { infoToUpdate: holidayResults })
