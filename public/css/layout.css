@@ -26,5 +26,10 @@ main {
 /* Tablet, & Desktop */
 
 @media only screen and (min-width: 768px) {
-
+  .calendar {
+    display: grid;
+    /* grid-row-gap: px; */
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 250px);
+  }
 }
