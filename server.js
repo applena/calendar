@@ -43,11 +43,10 @@ const db = new DB(pgClient);
 /**
  * Routes
  */
-app.get('/hello', hello);
 // Home page, month Calendar
 app.get('/', getCalendar);
 // View one specific day, and show holidays for that day
-app.get('/:day_num', getOneDayHolidays);
+app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);
 // Add a new holiday for specified day
 app.post('/:day_num/add', addHoliday);
 // Render Update/Delete page
@@ -63,11 +62,6 @@ app.delete('/:day_num/delete');
 /**
  * Routes
  */
-
-function hello(request, response){
-  console.log('hello');
-}
-
 function getCalendar(request, response) {
   
   // 1. Read DB for Holidays.
@@ -105,7 +99,7 @@ function getCalendar(request, response) {
         // console.log('Hello world');
         formatHolidays(holidays);
 
-        console.log('days', days);
+        // console.log('days', days);
         // console.log('holidays', holidays);
 
         // response.status(200);
@@ -127,29 +121,50 @@ function getCalendar(request, response) {
                 // Return Holidays with id to client
                 formatHolidays(holidays);
 
-                res.render('index', { days: days });
+                response.render('index', { days: days });
               })
-              .catch(err => new Error(err).exit(res));
+              .catch(err => new Error(err).exit(response));
           })
-          .catch(err => new Error(err).exit(res))
+          .catch(err => new Error(err).exit(response))
       }
     })
-    .catch(err => new Error(err).exit(res));
+    .catch(err => new Error(err).exit(response));
 }
 
 // app.use('*', wildcard);
 
 
+//  THIS FUNCTION IS VERIFIED BY ZEREK AND CHRIS AT 2:19
 function getOneDayHolidays(request, response) {
-  //line below may not work, depending on how the data is received
-  const day_num = request.params.day_num;
-  console.log(request.body)
-  //find all things for specified day
-  let sql = 'SELECT * FROM holidays WHERE day=$1';
-  pgClient.query(sql, [day_num]).then(oneDayHolidays => {
+  console.log('inside getoneHolidays')
+  let params = request.params
+  console.log('params is: ', params)
 
-    response.render('./pages/oneDay', { dayDisplayed: oneDayHolidays.rows })
+  const year_num = params.year_num;
+  const month_num = params.month_num;
+  const day_num = params.day_num;
+  let date = new Date().toString().slice(0, 10)
 
+  //find all things for specified day/month/year
+  let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
+  let sqlValues = [day_num, month_num, year_num]
+  pgClient.query(sql, sqlValues).then(oneDayHolidays => {
+    // console.log('results fromdb are: ',oneDayHolidays)
+
+
+    let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
+      let regex = / /g
+      let newHolidayname = value.name.replace(regex, '_')
+      return newHolidayname
+    })
+    console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
+
+    response.render('./pages/oneDay', {renderData:[
+      {holidays : oneDayHolidays.rows},
+      {dayHeader : date},
+      {pathFriendlyHolidayNames : pathFriendlyHolidayNames}
+    ]}
+    ).catch(err => new Error(err).exit(response));
   })
 }
 
@@ -178,7 +193,7 @@ function changeHolidayInfo(request, response) {
   pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
     let holidayResults = singleHoliday.rows[0];
     // console.log(holidayResults);
-    s
+
     //render editHoliday.ejs, send information from db
     response.render('./pages/editHoliday', { infoToUpdate: holidayResults })
   })

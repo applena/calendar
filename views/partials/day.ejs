@@ -1,10 +1,14 @@
-<% days.forEach(day => { %>
+<% renderData.holidays.forEach(day => { %>
     <div>
 
-        <a href="/<%= day.day %>" class="days">
-
+        <p>
+            <%= days.year %>
+        </p>
+        <a href="/day/<%days.year%>/<%days.month%>/<%days.day%>" class="days">
+            
             <h2>
-                <%= day.date %>
+
+                    <%= day.date %>
             </h2>
             <p>
                 <%= day.holiday %>

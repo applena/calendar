@@ -10,24 +10,8 @@
         <%- include('../partials/header') %>
     </header>
     <main>
-        <section>
-            <form class="add" action="/<%dayDisplayed.day%>/add" method="post">
-                <input type="hidden" type="_method" value="create">
-                <input type="hidden">
-            </form>
-            <%= dayDisplayed.name%>
-            <%= dayDisplayed.day%>
-            <%= dayDisplayed.type%>
-            <%= dayDisplayed.description%>
-
-
-
-
-
-            <form class="holiday_id" action="/<%dayDisplayed.day%>/change" method="POST">
-                <input type="hidden" type="">
-            </form>
-            </section>
+   <p>Values receieved:</p>
+   <p><%= renderData[0].holidays[0].name %></p>
 
 
 
