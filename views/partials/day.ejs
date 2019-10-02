@@ -1,16 +1,18 @@
 <% days.forEach(day => { %>
-    <div>
+    <% console.log(day) %>
+        <div>
 
-        <a href="/:`${day_num}`" class="days">
+            <a href="/day_num">
 
-            <h2>
-                <%= day.date %>
-            </h2>
-            <p>
-                <%= day.holiday %>
-            </p>
+                <h2>
+                    <%= day.date %>
+                </h2>
+                <p>
+                    <%= day.holiday %>
+                </p>
 
-        </a>
 
-    </div>
-    <% }) %>
+            </a>
+
+        </div>
+        <% }) %>
