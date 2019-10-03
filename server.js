@@ -148,9 +148,11 @@ function getOneDayHolidays(request, response) {
   const day_num = params.day_num;
 
   //find all things for specified day/month/year
+  console.log('making query for one-day view')
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
   let sqlValues = [day_num, month_num, year_num]
   pgClient.query(sql, sqlValues).then(oneDayHolidays => {
+    console.log('made database query')
     // console.log('results fromdb are: ',oneDayHolidays)
 
     let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
@@ -160,13 +162,19 @@ function getOneDayHolidays(request, response) {
     })
     // console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
 
+    console.log('sending these to pages/oneDay.ejs file!! >>>>>', oneDayHolidays.rows, date, pathFriendlyHolidayNames)
     response.render('./pages/oneDay', {
       renderData: [
         { holidays: oneDayHolidays.rows },
         { dayHeader: date },
         { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
       ]
-    }).catch(err => new Error(err).exit(response));
+      //   }).catch(response.status(500).render('pages/error');
+      // console.error(error)));
+    })
+      .catch(error => {
+        handleError(error, response)
+      })
   })
 }
 
@@ -221,13 +229,16 @@ function saveHoliday(request, response) {
       })
       // console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
 
-      response.render('./pages/oneDay', {
-        renderData: [
-          { holidays: oneDayHolidays.rows },
-          { dayHeader: date },
-          { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
-        ]
-      })
+      // response.render('./pages/oneDay', {
+      //   renderData: [
+      //     { holidays: oneDayHolidays.rows },
+      //     { dayHeader: date },
+      //     { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
+      //   ]
+      // })
+      let url=`/day/${year}/${month}/${day}`
+      console.log('sending the user to:', url)
+      response.redirect(url)
     })
   })
 }
@@ -283,6 +294,15 @@ function updateHolidayInfo(request, response) {
 /**
  * Port
  */
+
+
+function handleError(error, response){
+  response.status(500).render('pages/error');
+  console.error(error)
+}
+
+
+
 
 pgClient.connect()
   .then(() => {

@@ -11,7 +11,7 @@
     </header>
     <main>
 
-        <form action="/day/:year_num/:month_num/:day_num/save" method="POST">
+        <form action="/day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/save" method="POST">
             <input type="hidden" name="year" value="<%= renderData.year %>">
             <input type="hidden" name="month" value="<%= renderData.month %>">
             <input type="hidden" name="day" value="<%= renderData.day %>">
