@@ -139,11 +139,11 @@ function getOneDayHolidays(request, response) {
   console.log('inside getoneHolidays')
   let params = request.params
   console.log('params is: ', params)
+  let date = new Date().toString().slice(0, 10)
 
   const year_num = params.year_num;
   const month_num = params.month_num;
   const day_num = params.day_num;
-  let date = new Date().toString().slice(0, 10)
 
   //find all things for specified day/month/year
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
@@ -188,7 +188,7 @@ function changeHolidayInfo(request, response) {
   const specificDayHolidayData = request.body;
   // console.log(request.body);
   //select the information for selected holiday from db
-  const queryStatement = 'SELECT * FROM holidays WHERE name=$1;'
+  const queryStatement = 'SELECT * FRO M holidays WHERE name=$1;'
   const queryArrayData = [specificDayHolidayData.name]
   pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
     let holidayResults = singleHoliday.rows[0];
