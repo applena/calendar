@@ -141,23 +141,42 @@ function getOneDayHolidays(request, response){
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
   let sqlValues = [day_num, month_num, year_num]
   pgClient.query(sql, sqlValues).then(oneDayHolidays => {
-
     let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
       let regex = / /g
       let newHolidayname = value.name.replace(regex, '_')
       return newHolidayname
-    })
-    response.render('./pages/oneDay', {
-      renderData: [
-        { holidays: oneDayHolidays.rows },
-        { dayHeader: date },
-        { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
-      ]
-    })
-    // .catch(error => {
-    //   handleError(error, response)
-    // })
+    });
+
+    if (oneDayHolidays.rows[0]) {
+      // If day has holidays render all holidays
+      response.render('./pages/oneDay', {
+        renderData: [
+          { holidays: oneDayHolidays.rows },
+          { dayHeader: date },
+          { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
+        ]
+      });
+    } else {
+      response.render('./pages/oneDay', {
+        renderData: [
+          {
+            holidays: [{
+              year: new Date().getFullYear(),
+              month: new Date().getMonth() + 1,
+              day: new Date().getDate()
+            }]
+          },
+          {
+            dayHeader: date
+          },
+          {
+            pathFriendlyHolidayNames: pathFriendlyHolidayNames
+          }
+        ]
+      });
+    }
   })
+    .catch(err => new Error(err).exit(response));
 }
 //Add Holiday to specific day
 function addHoliday(request, response){
