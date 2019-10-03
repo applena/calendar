@@ -173,6 +173,7 @@ function getOneDayHolidays(request, response) {
 
 
 function addHoliday(request, response) {
+
   const param = request.params;
   console.log(param);
   const dateObject = {
