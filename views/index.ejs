@@ -11,20 +11,25 @@
     </header>
 
     <main>
-
-
-
         <section class="days">
-            <%- include('./partials/day') %>
-
+            <% calendarDays.forEach(calendarDay => { %>
+            <a href="/day/<%= calendarDay.year %>/<%= calendarDay.month %>/<%= calendarDay.day %>" class="days">
+                <section>
+                    <h2>
+                        <%= calendarDay.dayHeader %>
+                    </h2>
+                    <p>
+                        <%= calendarDay.holidayName %>
+                    </p>
+                </section>
+            </a>
+            <% }) %>
         </section>
-
     </main>
 
     <footer>
         <%- include('./partials/footer') %>
     </footer>
-
 </body>
 
 </html>
