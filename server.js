@@ -48,11 +48,13 @@ app.get('/', getCalendar);
 // View one specific day, and show holidays for that day
 app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);
 // Add a new holiday for specified day
-app.post('/:day_num/add', addHoliday);
+app.get('/day/:year_num/:month_num/:day_num/add', addHoliday);
 // Render Update/Delete page
 app.get('/:day_num/change', changeHolidayInfo);
 // Update existing Holiday
 app.post('/:day_num/update', updateHolidayInfo);
+// Save from addHoliday page
+app.post('/day/:year_num/:month_num/:day_num/save', saveHoliday)
 // Delete existing Holiday
 app.delete('/:day_num/delete');
 
@@ -63,7 +65,7 @@ app.delete('/:day_num/delete');
  * Routes
  */
 function getCalendar(request, response) {
-  
+
   // 1. Read DB for Holidays.
   // 2. If Holidays in DB (and Holidays are for current month) return Holidays to client.
   // 3. Else read Calendarific API holidays data,
@@ -138,7 +140,7 @@ function getCalendar(request, response) {
 function getOneDayHolidays(request, response) {
   console.log('inside getoneHolidays')
   let params = request.params
-  console.log('params is: ', params)
+  //   console.log('params is: ', params)
 
   const year_num = params.year_num;
   const month_num = params.month_num;
@@ -157,24 +159,41 @@ function getOneDayHolidays(request, response) {
       let newHolidayname = value.name.replace(regex, '_')
       return newHolidayname
     })
-    console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
+    // console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
 
-    response.render('./pages/oneDay', {renderData:[
-      {holidays : oneDayHolidays.rows},
-      {dayHeader : date},
-      {pathFriendlyHolidayNames : pathFriendlyHolidayNames}
-    ]}
-    ).catch(err => new Error(err).exit(response));
+    response.render('./pages/oneDay', {
+      renderData: [
+        { holidays: oneDayHolidays.rows },
+        { dayHeader: date },
+        { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
+      ]
+    }).catch(err => new Error(err).exit(response));
   })
 }
 
+
 function addHoliday(request, response) {
+  const params = request.params;
+  const dateObject = {
+    year: params.year_num,
+    month: params.month_num,
+    day: params.day
+  }
+  //   console.log(dateObject.year)
+  //   console.log('params', request.params)
+  response.render('pages/newHoliday', { renderData: dateObject })
+}
+
+
+function saveHoliday(request, response) {
+  console.log('in this great holiday');
   // adds an event to the selected day
   //line 87 may not work, depending on how the data is received
-  const day_num = request.params.body.day;
+  //   const day_num = request;
+  console.log(request.params)
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5);'
 
-  //insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
+  //   insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
   const queryArray = [formdata.name, formdata.month, formdata.year, formdata.day, formdata.type, formdata.description];
 
   pgClient.query(sqlInsert, queryArray).then(oneDayHolidays => {

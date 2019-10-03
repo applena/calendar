@@ -10,7 +10,20 @@
         <%- include('../partials/header') %>
     </header>
     <main>
-        <p>Values receieved:</p>
+        <a href="/day/<%=renderData[0].holidays[0].year%>/<%=renderData[0].holidays[0].month%>/<%=renderData[0].holidays[0].day%>/add">add holiday</a> /
+        <p>
+            <%=renderData[0].holidays[0].year%>/
+                <%=renderData[0].holidays[0].month%>/
+                    <%=renderData[0].holidays[0].day%>/add</p>
+        <p>
+            <%= renderData[0].holidays[0].year %>
+        </p>
+        <p>
+            <%= renderData[0].holidays[0].month %>
+        </p>
+        <p>
+            <%= renderData[0].holidays[0].day %>
+        </p>
         <p>
             <%= renderData[0].holidays[0].name %>
         </p>
