@@ -3,14 +3,14 @@
 
 main {
   width: 80%;
-  margin: 40px auto;
+  margin: 4em auto;
 }
 
 .calendar {
   display: grid;
-  grid-row-gap: 30px;
+  grid-row-gap: 1em;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(42, 250px);
+  grid-template-rows: repeat(31, 18em);
 }
 
 .copyright {
@@ -19,17 +19,29 @@ main {
 
 .website_header_footer {
   background-color: green;
-  height: 60px;
-  padding: 10px;
+  padding: 2em;
 }
 
-/* Tablet, & Desktop */
+/* Tablet */
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 768px) and (max-width: 1439px) {
   .calendar {
     display: grid;
-    /* grid-row-gap: px; */
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(12, 18em);
+  }
+}
+
+/* Desktop */
+
+@media only screen and (min-width: 1440px) {
+  .calendar {
+    display: grid;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, 250px);
+    grid-template-rows: repeat(6, 18em);
   }
 }

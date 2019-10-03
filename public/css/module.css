@@ -1,21 +1,18 @@
 
-.date_header {
-  font-size: 32pt;
+.day_header {
+  font-size: 20pt;
+  margin-bottom: 1em;
 }
 
 .days {
   background-color: lightblue;
-  border-radius: 20px;
+  border: solid #111 0.125em;
+  border-radius: 1em;
   color: #111;
-  padding: 10px;
+  padding: 1em;
   text-decoration: none;
 }
 
-.holiday_name {
-  font-size: 24pt;
-  vertical-align: bottom;
-}
-
-.website_title {
-  font-size: 32pt;
+.holiday {
+  font-size: 18pt;
 }
