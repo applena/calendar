@@ -50,16 +50,20 @@ app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);// Done-ZC
 // Add a new holiday for specified day
 app.get('/day/:year_num/:month_num/:day_num/add', addHoliday);// Done-ZC
 // Save from addHoliday page
-app.post('/day/:year_num/:month_num/:day_num/save', saveHoliday); // Done-ZC
+app.post('/day/:year_num/:month_num/:day_num/save', saveNewHoliday); // Done-ZC
 // Render Update/Delete page
 app.get('/day/:year_num/:month_num/:day_num/:holiday_name/change', changeHolidayPage);// Done-ZC
 // Update existing Holiday
 app.post('/day/:year_num/:month_num/:day_num/:holiday_id/update', updateHolidayInfo);// Done-ZC
+// Delete existing Holiday
+app.delete('/day/:year_num/:month_num/:day_num/:holiday_id/delete', deleteHolidayInfo);// Done-ZC
+
 
 /**
  * Routes
  */
-function getCalendar(request, response) {
+
+function getCalendar(request, response){
 
   // 1. Read DB for Holidays.
   // 2. If Holidays in DB (and Holidays are for current month) return Holidays to client.
@@ -92,7 +96,7 @@ function getCalendar(request, response) {
   db.readDBForOneHolidayEachDay()
     .then(holidays => {
       // If Holidays in DB return Holidays to client
-      if (holidays[0]) {
+      if (holidays[0]){
         // console.log('Hello world');
         formatHolidays(holidays);
 
@@ -128,148 +132,109 @@ function getCalendar(request, response) {
     .catch(err => new Error(err).exit(response));
 }
 
-// app.use('*', wildcard);
 
-
-//  THIS FUNCTION IS VERIFIED BY ZEREK AND CHRIS AT 2:19
-function getOneDayHolidays(request, response) {
+// View specific-day holidays
+function getOneDayHolidays(request, response){
   console.log('inside getoneHolidays')
   let params = request.params
-  //   console.log('params is: ', params)
-
   let date = new Date().toString().slice(0, 10)
   const year_num = params.year_num;
   const month_num = params.month_num;
   const day_num = params.day_num;
-
-  //find all things for specified day/month/year
-  console.log('making query for one-day view')
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
   let sqlValues = [day_num, month_num, year_num]
   pgClient.query(sql, sqlValues).then(oneDayHolidays => {
-    console.log('made database query')
-    // console.log('results fromdb are: ',oneDayHolidays)
 
     let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
       let regex = / /g
       let newHolidayname = value.name.replace(regex, '_')
       return newHolidayname
     })
-    // console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
-
-    console.log('sending these to pages/oneDay.ejs file!! >>>>>', oneDayHolidays.rows, date, pathFriendlyHolidayNames)
     response.render('./pages/oneDay', {
       renderData: [
         { holidays: oneDayHolidays.rows },
         { dayHeader: date },
         { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
       ]
-      //   }).catch(response.status(500).render('pages/error');
-      // console.error(error)));
     })
-      .catch(error => {
-        handleError(error, response)
-      })
+    // .catch(error => {
+    //   handleError(error, response)
+    // })
   })
 }
-
-
-function addHoliday(request, response) {
-
+//Add Holiday to specific day
+function addHoliday(request, response){
+  console.log('inside addHoliday')
   const param = request.params;
-  console.log(param);
   const dateObject = {
     year: param.year_num,
     month: param.month_num,
     day: param.day_num
   }
-  console.log(dateObject.year)
-  console.log('params', request.params)
   response.render('pages/newHoliday', { renderData: dateObject })
 }
-
-
-function saveHoliday(request, response) {
-  console.log('in this great holiday');
-  // console.log(request.body)
-
-  // adds an event to the selected day
-  //line 87 may not work, depending on how the data is received
+// Saves new holiday information from newHoliday page
+function saveNewHoliday(request, response){
+  console.log('inside saveNewHoliday');
   const formData = request.body;
-  const name = formData.name;
   const year = formData.year;
   const month = formData.month;
   const day = formData.day;
-
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5, $6);'
-
-  //   //   insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
   const queryArray = [formData.name, formData.month, formData.year, formData.day, formData.type, formData.description];
 
-  pgClient.query(sqlInsert, queryArray).then(oneDayHolidays => {
-    let date = new Date().toString().slice(0, 10)
-    //   console.log('params is: ', params)
-
-    //find all things for specified day/month/year
+  pgClient.query(sqlInsert, queryArray).then(() => {
     let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
     let sqlValues = [day, month, year]
-    pgClient.query(sql, sqlValues).then(oneDayHolidays => {
-      // console.log('results fromdb are: ',oneDayHolidays)
+    pgClient.query(sql, sqlValues).then(() => {
 
-
-      let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
-        let regex = / /g
-        let newHolidayname = value.name.replace(regex, '_')
-        return newHolidayname
-      })
-      // console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
-
-      // response.render('./pages/oneDay', {
-      //   renderData: [
-      //     { holidays: oneDayHolidays.rows },
-      //     { dayHeader: date },
-      //     { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
-      //   ]
-      // })
       let url=`/day/${year}/${month}/${day}`
       console.log('sending the user to:', url)
       response.redirect(url)
     })
   })
 }
-
-function changeHolidayPage(request, response) {
-  //identify which holiday user clicked on
+// Redirects to update/delete selected holiday
+function changeHolidayPage(request, response){
+  console.log('inside chageHolidayPage')
   const param = request.params
-  // console.log(param);
-  //select the information for selected holiday from db
   const queryStatement = 'SELECT * FROM holidays WHERE name=$1;'
   const queryArrayData = [param.holiday_name]
   pgClient.query(queryStatement, queryArrayData)
     .then(singleHoliday => {
       let holidayResults = singleHoliday.rows[0];
-      // console.log('pulling: ',holidayResults, 'from db');
       response.render('./pages/editHoliday', { renderData: holidayResults })
     })
 }
-
-
-function updateHolidayInfo(request, response) {
-  console.log('we got to 268')
+// Saves updated Holiday information to DB
+function updateHolidayInfo(request, response){
+  console.log('inside updateHolidayInfo')
   const param = request.params;
   const day=param.day_num;
   const month=param.month_num;
   const year=param.year_num;
-  console.log('request body is: ', request.body)
   const updatedInfo = request.body
   const sqlUpdatestatment = 'UPDATE holidays SET name=$1, type=$2, description=$3 WHERE id=$4'
   const sqlUpdateArray = [updatedInfo.name, updatedInfo.type, updatedInfo.description, param.holiday_id]
-  // console.log('sqlUpdateArray is: ', sqlUpdateArray)
-
-  //save updated information to the database
-  pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(updatedInfo => {
+  pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(() => {
     response.redirect(`/day/${year}/${month}/${day}`)
   })
+}
+// Deletes specified Holiday from DB
+function deleteHolidayInfo(request, response){
+  console.log('inside deleteHolidayInfo')
+  const param = request.params;
+  const day=param.day_num;
+  const month=param.month_num;
+  const year=param.year_num;
+  const id = param.holiday_id
+  pgClient.query('SELECT * FROM holidays WHERE id=$1', [id])
+    .then(() => {
+      pgClient.query('delete from holidays where id=$1;', [id]).then(() => {
+        console.log('deleted the thing')
+        response.redirect(`/day/${year}/${month}/${day}`)
+      })
+    })
 }
 
 /**

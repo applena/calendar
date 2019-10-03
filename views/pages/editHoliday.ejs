@@ -25,7 +25,7 @@
             </fieldset>
         </form>
 
-        <form id="delete-form" action="day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/<%=renderData.id%>/delete" method="POST">
+        <form id="delete-form" action="/day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/<%=renderData.id%>/delete" method="POST">
             <fieldset>
               <input type="hidden" name="id" value="<%= renderData.id %>" > 
               <input type="hidden" name="_method" value="DELETE">
