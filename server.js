@@ -45,6 +45,8 @@ const api = new API();
  */
 // Home page, month Calendar
 app.get('/', getCalendar);
+// Go to About us Page
+app.get('/aboutUs', getAboutUs)
 // View one specific day, and show holidays for that day
 app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);// Done-ZC
 // Add a new holiday for specified day
@@ -62,36 +64,6 @@ app.delete('/day/:year_num/:month_num/:day_num/:holiday_id/delete', deleteHolida
 /**
  * Routes
  */
-// function getCalendar(request, response){
-//   //query database
-//   console.log('on 67')
-//   pgClient.query('SELECT COUNT(*) FROM holidays;')
-//     .then(sqlResults => {
-//     //everything happens inside of this .then statement
-//       const initQuery = sqlResults.rows[0].count
-//       console.log('results are:', initQuery)
-//       if(initQuery === '0'){
-//         console.log('inside if statement')
-//       // Read Calendarific API holidays data
-//         const date = new Date();
-//         const year = date.getFullYear();
-//         const month = date.getMonth() + 1;
-//         return api.readAPI(year, month).then(results => {
-//           console.log('after api: ')
-//           console.log(results)
-//           console.log('end of results')
-//           }).then(things => {
-//           })
-//       }else{
-//         console.log('results already in db')
-//       }
-//       //if query result === 0 or undefined, make api call
-//       //else send results to FE
-//     })
-// }
-
-
-
 
 function getCalendar(request, response){
 
@@ -166,6 +138,11 @@ function getCalendar(request, response){
         return new Error(err).exit(response);
       }
     });
+}
+
+// View About Us
+function getAboutUs(request, response){
+  response.render('./pages/aboutUs')
 }
 
 
