@@ -112,19 +112,21 @@ function getCalendar(request, response){
       // If Holidays in DB and Holidays are for current month return Holidays to client
       if (holidays[0] && holidays[0].month === new Date().getMonth() + 1) {
         getCalendarHelper(holidays, response);
+        // Exit Promise chain better
+        reject('Promise exit');
       } else {
         return new Promise(resolve => resolve());
       }
     })
-    // .then(() => {
-    //   // Otherwise delete then create DB
-    //   const dropSql = 'DROP TABLE IF EXISTS holidays;';
-    //   const createSql = 'CREATE TABLE holidays (id SERIAL PRIMARY KEY, name VARCHAR(255), year INTEGER, month INTEGER, day INTEGER, type VARCHAR(255), description VARCHAR(511));';
-    //   return Promise.all([
-    //     pgClient.query(dropSql),
-    //     pgClient.query(createSql)
-    //   ]);
-    // })
+    .then(() => {
+      // Otherwise delete then create DB
+      const dropSql = 'DROP TABLE IF EXISTS holidays;';
+      const createSql = 'CREATE TABLE holidays (id SERIAL PRIMARY KEY, name VARCHAR(255), year INTEGER, month INTEGER, day INTEGER, type VARCHAR(255), description VARCHAR(511));';
+      return Promise.all([
+        pgClient.query(dropSql),
+        pgClient.query(createSql)
+      ]);
+    })
     .then(() => {
       // Read Calendarific API holidays data
       const date = new Date();
@@ -157,7 +159,13 @@ function getCalendar(request, response){
       const holidays = sqlRes.rows;
       getCalendarHelper(holidays, response);
     })
-    .catch(err => new Error(err).exit(response));
+    .catch(err => {
+      if (err === 'Promise exit') {
+        console.log('Hello world');
+      } else {
+        return new Error(err).exit(response);
+      }
+    });
 }
 
 
