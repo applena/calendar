@@ -1,0 +1,9 @@
+body {
+  background-color: lightpink;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.site_title {
+  font-size: 24pt;
+  margin-bottom: 0.5em;
+}

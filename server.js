@@ -62,6 +62,36 @@ app.delete('/day/:year_num/:month_num/:day_num/:holiday_id/delete', deleteHolida
 /**
  * Routes
  */
+// function getCalendar(request, response){
+//   //query database
+//   console.log('on 67')
+//   pgClient.query('SELECT COUNT(*) FROM holidays;')
+//     .then(sqlResults => {
+//     //everything happens inside of this .then statement
+//       const initQuery = sqlResults.rows[0].count
+//       console.log('results are:', initQuery)
+//       if(initQuery === '0'){
+//         console.log('inside if statement')
+//       // Read Calendarific API holidays data
+//         const date = new Date();
+//         const year = date.getFullYear();
+//         const month = date.getMonth() + 1;
+//         return api.readAPI(year, month).then(results => {
+//           console.log('after api: ')
+//           console.log(results)
+//           console.log('end of results')
+//           }).then(things => {
+//           })
+//       }else{
+//         console.log('results already in db')
+//       }
+//       //if query result === 0 or undefined, make api call
+//       //else send results to FE
+//     })
+// }
+
+
+
 
 function getCalendar(request, response){
 
@@ -72,6 +102,7 @@ function getCalendar(request, response){
   // 5. Normalize Calendarific API holidays data to Holidays.
   // 6. Create Holidays in DB. Go to step 1.
   // 7. Now done.
+
 
   // Read DB for Holidays
   const sql = 'SELECT DISTINCT ON (day) day, id, name, year, month, type, description FROM holidays ORDER BY day ASC;';
