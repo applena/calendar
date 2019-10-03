@@ -62,36 +62,6 @@ app.delete('/day/:year_num/:month_num/:day_num/:holiday_id/delete', deleteHolida
 /**
  * Routes
  */
-// function getCalendar(request, response){
-//   //query database
-//   console.log('on 67')
-//   pgClient.query('SELECT COUNT(*) FROM holidays;')
-//     .then(sqlResults => {
-//     //everything happens inside of this .then statement
-//       const initQuery = sqlResults.rows[0].count
-//       console.log('results are:', initQuery)
-//       if(initQuery === '0'){
-//         console.log('inside if statement')
-//       // Read Calendarific API holidays data
-//         const date = new Date();
-//         const year = date.getFullYear();
-//         const month = date.getMonth() + 1;
-//         return api.readAPI(year, month).then(results => {
-//           console.log('after api: ')
-//           console.log(results)
-//           console.log('end of results')
-//           }).then(things => {
-//           })
-//       }else{
-//         console.log('results already in db')
-//       }
-//       //if query result === 0 or undefined, make api call
-//       //else send results to FE
-//     })
-// }
-
-
-
 
 function getCalendar(request, response){
 
@@ -103,7 +73,6 @@ function getCalendar(request, response){
   // 6. Create Holidays in DB. Go to step 1.
   // 7. Now done.
 
-
   // Read DB for Holidays
   const sql = 'SELECT DISTINCT ON (day) day, id, name, year, month, type, description FROM holidays ORDER BY day ASC;';
   pgClient.query(sql)
@@ -112,8 +81,6 @@ function getCalendar(request, response){
       // If Holidays in DB and Holidays are for current month return Holidays to client
       if (holidays[0] && holidays[0].month === new Date().getMonth() + 1) {
         getCalendarHelper(holidays, response);
-        // Exit Promise chain better
-        reject('Promise exit');
       } else {
         return new Promise(resolve => resolve());
       }
@@ -159,13 +126,7 @@ function getCalendar(request, response){
       const holidays = sqlRes.rows;
       getCalendarHelper(holidays, response);
     })
-    .catch(err => {
-      if (err === 'Promise exit') {
-        console.log('Hello world');
-      } else {
-        return new Error(err).exit(response);
-      }
-    });
+    .catch(err => new Error(err).exit(response));
 }
 
 
@@ -177,7 +138,6 @@ function getOneDayHolidays(request, response){
   const year_num = params.year_num;
   const month_num = params.month_num;
   const day_num = params.day_num;
-  console.log('day is: ', day_num)
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
   let sqlValues = [day_num, month_num, year_num]
   pgClient.query(sql, sqlValues).then(oneDayHolidays => {
@@ -201,9 +161,9 @@ function getOneDayHolidays(request, response){
         renderData: [
           {
             holidays: [{
-              year: year_num,
-              month: month_num,
-              day: day_num
+              year: new Date().getFullYear(),
+              month: new Date().getMonth() + 1,
+              day: new Date().getDate()
             }]
           },
           {
@@ -227,7 +187,6 @@ function addHoliday(request, response){
     month: param.month_num,
     day: param.day_num
   }
-  console.log('day is: ', dateObject.day)
   response.render('pages/newHoliday', { renderData: dateObject })
 }
 // Saves new holiday information from newHoliday page
@@ -237,7 +196,6 @@ function saveNewHoliday(request, response){
   const year = formData.year;
   const month = formData.month;
   const day = formData.day;
-  console.log('sending info to day no. : ', day)
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5, $6);'
   const queryArray = [formData.name, formData.month, formData.year, formData.day, formData.type, formData.description];
 
@@ -335,7 +293,8 @@ function getCalendarHelper(holidays, response) {
 
 /**
  * Port
-*/
+ */
+
 
 function handleError(error, response){
   response.status(500).render('pages/error');
