@@ -1,13 +1,16 @@
-<% days.forEach(day => { %>
-    <a href="/:`${day_num}`" class="days">
+<% calendarDays.forEach(calendarDay => { %>
+    <% if (calendarDay) { %>
+    <a href="/day/<%= calendarDay.year %>/<%= calendarDay.month %>/<%= calendarDay.day %>" class="days">
         <section>
-                <h2 class="date_header">
-                    <%= day.date %>
-                </h2>
-                <br>
-                <p class="holiday_name">
-                    <%= day.holiday %>
-                </p>
+            <h2>
+                <%= calendarDay.dayHeader %>
+            </h2>
+            <p>
+                <%= calendarDay.holidayName %>
+            </p>
         </section>
     </a>
+    <% } else { %>
+    <section>Blank</section>
+    <% } %>
 <% }) %>
