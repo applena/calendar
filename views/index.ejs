@@ -2,24 +2,38 @@
 <html lang="en">
 
 <head>
+    <%- include('./partials/head') %>
 </head>
 
 <body>
     <header>
+        <%- include('./partials/header') %>
     </header>
 
     <main>
-        <% days.forEach(day => { %>
         <section class="days">
-            <h2>><%= day.date %></h2>
-            <p><%= day.holiday %></p>
+            <% calendarDays.forEach(calendarDay => { %>
+                <% if (calendarDay) { %>
+                <a href="/day/<%= calendarDay.year %>/<%= calendarDay.month %>/<%= calendarDay.day %>" class="days">
+                    <section>
+                        <h2>
+                            <%= calendarDay.dayHeader %>
+                        </h2>
+                        <p>
+                            <%= calendarDay.holidayName %>
+                        </p>
+                    </section>
+                </a>
+                <% } else { %>
+                <section>Blank</section>
+                <% } %>
+            <% }) %>
         </section>
-        <% }) %>
     </main>
 
     <footer>
+        <%- include('./partials/footer') %>
     </footer>
-
 </body>
 
 </html>
