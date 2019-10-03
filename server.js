@@ -71,38 +71,36 @@ function hello(request, response){
 function getCalendar(request, response) {
 
   // 1. Read DB for Holidays.
-  // 2. If Holidays in DB (and Holidays are for current month) return Holidays to client.
-  // 3. Else read Calendarific API holidays data,
-  //   Normalize Calendarific API holidays data to Holidays,
-  //   Create Holidays in DB,
-  //   Read DB for Holidays,
-  //   Return Holidays with id to client.
-
-  // const self = this;
+  // 2. If Holidays in DB and Holidays are for current month return Holidays to client. Go to step 7.
+  // 3. Otherwise delete then create DB.
+  // 4. Read Calendarific API holidays data.
+  // 5. Normalize Calendarific API holidays data to Holidays.
+  // 6. Create Holidays in DB. Go to step 1.
+  // 7. Now done.
 
   // Read DB for Holidays
-  let sql = 'SELECT DISTINCT ON (day) day, id, name, year, month, type, description FROM holidays ORDER BY day ASC;';
+  const sql = 'SELECT DISTINCT ON (day) day, id, name, year, month, type, description FROM holidays ORDER BY day ASC;';
   pgClient.query(sql)
     .then(sqlRes => {
       const holidays = sqlRes.rows;
-      // If Holidays in DB
-      if (holidays[0]) {
-        // And Holidays are for current month
-        if (holidays[0].month === new Date().getMonth() + 1) {
-          // Return Holidays to client
-        } else {
-          // Else delete Holidays from DB
-          sql = 'DROP TABLE holidays;';
-          return pgClient.query(sql)
-            .then(() => new Promise(resolve => resolve(true)))
-            .catch(err => new Error(err).exit(response));
-        }
+      // If Holidays in DB and Holidays are for current month return Holidays to client
+      if (holidays[0] && holidays[0].month === new Date().getMonth() + 1) {
+        getCalendarHelper(holidays, response);
       } else {
-        return new Promise(resolve => resolve(true));
+        return new Promise(resolve => resolve());
       }
     })
     .then(() => {
-      // Else read Calendarific API holidays data
+      // Otherwise delete then create DB
+      const dropSql = 'DROP TABLE IF EXISTS holidays;';
+      const createSql = 'CREATE TABLE holidays (id SERIAL PRIMARY KEY, name VARCHAR(255), year INTEGER, month INTEGER, day INTEGER, type VARCHAR(255), description VARCHAR(511));';
+      return Promise.all([
+        pgClient.query(dropSql),
+        pgClient.query(createSql)
+      ]);
+    })
+    .then(() => {
+      // Read Calendarific API holidays data
       const date = new Date();
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
@@ -129,73 +127,9 @@ function getCalendar(request, response) {
       return pgClient.query(sql);
     })
     .then(sqlRes => {
-      // Return Holidays with id to client
+      // If Holidays in DB and Holidays are for current month return Holidays to client
       const holidays = sqlRes.rows;
-
-      // console.log(holidays);
-
-      const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      let calendarDays = new Array(42).fill({});
-      calendarDays = calendarDays.map((calendarDay, index) => {
-        const holiday = holidays.find(holiday => {
-          return holiday.day === index + 1;
-        });
-
-        // console.log(holiday)
-
-        if (holiday) {
-          const date = new Date(`${holiday.year}-${holiday.month}-${holiday.day}`);
-          // const weekday = weekdays[date.getDay()];
-          return {
-            dayHeader: `${weekday} ${holiday.day}`,
-            holidayName: holiday.name,
-            year: holiday.year,
-            month: holiday.month,
-            day: holiday.day
-          };
-        }
-      });
-      console.log('calendarDays', calendarDays);
-      // console.log('length', calendarDays.length);
-
-
-      // const daysInMonth = new Date(holidays[0].year, holidays[0].month, 0).getDate();
-      // const firstDayInMonth = new Date(`${holidays[0].year}-${holidays[0].month}-${holidays[0].day}`);
-      // const renderHolidays = holidays.map((holiday, index, arr) => {
-      //   const weekday = weekdays[(firstDayInMonth.getDay() + index) % 7];
-
-      //   console.log(holiday.day);
-      //   console.log(arr[index - 1].day);
-
-      //   const holidayDayDifference = holiday.day - arr[index - 1].day;
-      //   if (holidayDayDifference === 0) {
-      //     return {
-      //       dayHeader: `${weekday} ${holiday.day}`,
-      //       holidayName: holiday.name,
-      //       year: holiday.year,
-      //       month: holiday.month,
-      //       day: holiday.day
-      //     };
-      //   } else {
-      //     for (let i = 0; i < holidayDayDifference; i++) {
-      //       return new Array(holidayDayDifference).fill({});
-      //     }
-      //   }
-      // });
-
-      // console.log(renderHolidays);
-
-      // for (let i = 0; i < firstDayInMonth.getDay(); i++) {
-      //   renderHolidays.unshift({});
-      // }
-
-      // for (let i = 0; i < daysInMonth; i++) {
-      //   renderHolidays.push({});
-      // }
-
-      response.render('index', {
-        calendarDays: calendarDays
-      });
+      getCalendarHelper(holidays, response);
     })
     .catch(err => new Error(err).exit(response));
 }
@@ -241,7 +175,7 @@ function changeHolidayInfo(request, response) {
   pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
     let holidayResults = singleHoliday.rows[0];
     // console.log(holidayResults);
-    s
+    // s
     //render editHoliday.ejs, send information from db
     response.render('./pages/editHoliday', { infoToUpdate: holidayResults })
   })
@@ -262,6 +196,43 @@ function updateHolidayInfo(request, response) {
   pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(updatedInfo => {
     response.redirect(`/${day_num}`)
   })
+}
+
+/**
+ * Helpers
+ */
+
+function getCalendarHelper(holidays, response) {
+  // const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  let calendarDays = new Array(31).fill({});
+  calendarDays = calendarDays.map((calendarDay, index) => {
+    const holiday = holidays.find(holiday => {
+      return holiday.day === index + 1;
+    });
+
+    // const weekday = weekdays[index % 7];
+    if (holiday) {
+      return {
+        dayHeader: index + 1,
+        holidayName: holiday.name,
+        year: holiday.year,
+        month: holiday.month,
+        day: holiday.day
+      };
+    } else {
+      return {
+        dayHeader: index + 1,
+        holidayName: '',
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        day: index + 1
+      }
+    }
+  });
+
+  response.render('index', {
+    calendarDays: calendarDays
+  });
 }
 
 /**
