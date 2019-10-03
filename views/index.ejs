@@ -11,23 +11,8 @@
     </header>
 
     <main>
-        <section class="days">
-            <% calendarDays.forEach(calendarDay => { %>
-                <% if (calendarDay) { %>
-                <a href="/day/<%= calendarDay.year %>/<%= calendarDay.month %>/<%= calendarDay.day %>" class="days">
-                    <section>
-                        <h2>
-                            <%= calendarDay.dayHeader %>
-                        </h2>
-                        <p>
-                            <%= calendarDay.holidayName %>
-                        </p>
-                    </section>
-                </a>
-                <% } else { %>
-                <section>Blank</section>
-                <% } %>
-            <% }) %>
+        <section class="calendar">
+            <%- include('./partials/day') %>
         </section>
     </main>
 

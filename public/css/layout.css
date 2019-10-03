@@ -1,0 +1,47 @@
+
+/* Mobile */
+
+main {
+  width: 80%;
+  margin: 4em auto;
+}
+
+.calendar {
+  display: grid;
+  grid-row-gap: 1em;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(31, 18em);
+}
+
+.copyright {
+  line-height: 100%;
+}
+
+.website_header_footer {
+  background-color: green;
+  padding: 2em;
+}
+
+/* Tablet */
+
+@media only screen and (min-width: 768px) and (max-width: 1439px) {
+  .calendar {
+    display: grid;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(12, 18em);
+  }
+}
+
+/* Desktop */
+
+@media only screen and (min-width: 1440px) {
+  .calendar {
+    display: grid;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 18em);
+  }
+}
