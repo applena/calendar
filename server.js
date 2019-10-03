@@ -332,8 +332,7 @@ function getCalendarHelper(holidays, response) {
 
 /**
  * Port
- */
-
+*/
 
 function handleError(error, response){
   response.status(500).render('pages/error');
