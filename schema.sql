@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS calendar;
-CREATE DATABASE calendar;
-\c calendar;
+-- DROP DATABASE IF EXISTS calendar;
+-- CREATE DATABASE calendar;
+-- \c calendar;
 
 DROP TABLE IF EXISTS holidays;
 CREATE TABLE holidays (
