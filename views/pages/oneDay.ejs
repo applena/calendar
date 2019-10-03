@@ -10,24 +10,35 @@
         <%- include('../partials/header') %>
     </header>
     <main>
-        <section>
-            <form class="add" action="/<%dayDisplayed.day%>/add" method="post">
-                <input type="hidden" type="_method" value="create">
-                <input type="hidden">
-            </form>
-            <%= dayDisplayed.name%>
-            <%= dayDisplayed.day%>
-            <%= dayDisplayed.type%>
-            <%= dayDisplayed.description%>
+        <a href="/day/<%=renderData[0].holidays[0].year%>/<%=renderData[0].holidays[0].month%>/<%=renderData[0].holidays[0].day%>/add">add holiday</a>
+        <p>
+            <%=renderData[0].holidays[0].year%>/
+                <%=renderData[0].holidays[0].month%>/
+                    <%=renderData[0].holidays[0].day%>/add</p>
+
+
+        <article>
+                <p><% renderData[0].holidays.forEach(holiday => { %>
+                    <p><a href="/day/<%=holiday.year%>/<%=holiday.month%>/<%=holiday.day%>/<%=holiday.name%>/change"><%= holiday.name %></a></p>
+                <% }) %></p>
+        </article>
+
+
+        <p>
 
 
 
-
-
-            <form class="holiday_id" action="/<%dayDisplayed.day%>/change" method="POST">
-                <input type="hidden" type="">
-            </form>
-            </section>
+            <%= renderData[0].holidays[0].year %>
+        </p>
+        <p>
+            <%= renderData[0].holidays[0].month %>
+        </p>
+        <p>
+            <%= renderData[0].holidays[0].day %>
+        </p>
+        <p>
+            <%= renderData[0].holidays[0].name %>
+        </p>
 
 
 

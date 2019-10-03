@@ -11,6 +11,15 @@
     </header>
     <main>
 
+        <form action="/day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/save" method="POST">
+            <input type="hidden" name="year" value="<%= renderData.year %>">
+            <input type="hidden" name="month" value="<%= renderData.month %>">
+            <input type="hidden" name="day" value="<%= renderData.day %>">
+            <input type="text" name="name" placeholder="holiday name" value="">
+            <input type="text" name="type" placeholder="holiday type - federal/state/etc..." value="">
+            <textarea type="text" name="description" placeholder="Description" cols="30" rows="10"></textarea>
+            <input type="submit" value="save">
+        </form>
 
 
 
