@@ -13,7 +13,7 @@ const pg = require('pg');
 
 // Get local packages
 const API = require('./modules/api');
-const DB = require('./modules/db');
+// const DB = require('./modules/db');
 const Error = require('./modules/error');
 
 // Set PostgreSQL database client
@@ -38,7 +38,7 @@ app.set('view engine', 'ejs');
 
 // Set local packages
 const api = new API();
-const db = new DB(pgClient);
+// const db = new DB(pgClient);
 
 /**
  * Routes
@@ -281,9 +281,6 @@ function handleError(error, response){
   response.status(500).render('pages/error');
   console.error(error)
 }
-
-
-
 
 pgClient.connect()
   .then(() => {
