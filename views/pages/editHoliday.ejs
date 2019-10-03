@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head') %>
+    <%- include('../partials/head')%>
 </head>
 
 <body>
@@ -10,15 +10,31 @@
         <%- include('../partials/header') %>
     </header>
     <main>
-        <form id="" action="/<%infoToUpdate.day%>/update" method="POST">
+        <form id="save-form" action="/day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/<%=renderData.id%>/update" method="POST">
             <fieldset>
-                <input type="text" name="name" value="<%=infoToUpdate.name%>">
-                <input type="text" name="type" value="<%=infoToUpdate.type%>">
-                <input type="text" name="description" value="<%=infoToUpdate.description%>">
+                <p>something</p>
+                <input type="text" name="name" value="<%=renderData.name%>">
+                <input type="text" name="type" value="<%=renderData.type%>">
+                <textarea type="text" name="description" placeholder="<%=renderData.description%>" cols="30" rows="10"></textarea>
 
-                <input type="submit" value="update">
+
+                <p>button of form below</p>
+                <input type="submit" value="Save Changes">
+                <p>button of form above</p>
+
             </fieldset>
         </form>
+
+        <form id="delete-form" action="day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/<%=renderData.id%>/delete" method="POST">
+            <fieldset>
+              <input type="hidden" name="id" value="<%= renderData.id %>" > 
+              <input type="hidden" name="_method" value="DELETE">
+              <button>
+                    Delete Holiday
+              </button>         
+            </fieldset>
+    
+          </form>
 
     </main>
     <footer>

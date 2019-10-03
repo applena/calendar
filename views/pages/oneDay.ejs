@@ -10,16 +10,16 @@
         <%- include('../partials/header') %>
     </header>
     <main>
-        <a href="/day/<%=renderData[0].holidays[0].year%>/<%=renderData[0].holidays[0].month%>/<%=renderData[0].holidays[0].day%>/add">add holiday</a> /
+        <a href="/day/<%=renderData[0].holidays[0].year%>/<%=renderData[0].holidays[0].month%>/<%=renderData[0].holidays[0].day%>/add">add holiday</a>
         <p>
             <%=renderData[0].holidays[0].year%>/
                 <%=renderData[0].holidays[0].month%>/
                     <%=renderData[0].holidays[0].day%>/add</p>
-                    
+
 
         <article>
                 <p><% renderData[0].holidays.forEach(holiday => { %>
-                    <p><%= holiday.name %></p>
+                    <p><a href="/day/<%=holiday.year%>/<%=holiday.month%>/<%=holiday.day%>/<%=holiday.name%>/change"><%= holiday.name %></a></p>
                 <% }) %></p>
         </article>
 

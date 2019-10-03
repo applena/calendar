@@ -46,20 +46,15 @@ const db = new DB(pgClient);
 // Home page, month Calendar
 app.get('/', getCalendar);
 // View one specific day, and show holidays for that day
-app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);
+app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);// Done-ZC
 // Add a new holiday for specified day
-app.get('/day/:year_num/:month_num/:day_num/add', addHoliday);
-// Render Update/Delete page
-app.get('/:day_num/change', changeHolidayInfo);
-// Update existing Holiday
-app.post('/:day_num/update', updateHolidayInfo);
+app.get('/day/:year_num/:month_num/:day_num/add', addHoliday);// Done-ZC
 // Save from addHoliday page
-app.post('/day/:year_num/:month_num/:day_num/save', saveHoliday)
-// Delete existing Holiday
-app.delete('/:day_num/delete');
-
-//catch-all for unspecified routes
-// app.use('*', wildcard);
+app.post('/day/:year_num/:month_num/:day_num/save', saveHoliday); // Done-ZC
+// Render Update/Delete page
+app.get('/day/:year_num/:month_num/:day_num/:holiday_name/change', changeHolidayPage);// Done-ZC
+// Update existing Holiday
+app.post('/day/:year_num/:month_num/:day_num/:holiday_id/update', updateHolidayInfo);// Done-ZC
 
 /**
  * Routes
@@ -243,51 +238,37 @@ function saveHoliday(request, response) {
   })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function changeHolidayInfo(request, response) {
+function changeHolidayPage(request, response) {
   //identify which holiday user clicked on
-  const specificDayHolidayData = request.body;
-  // console.log(request.body);
+  const param = request.params
+  // console.log(param);
   //select the information for selected holiday from db
   const queryStatement = 'SELECT * FROM holidays WHERE name=$1;'
-  const queryArrayData = [specificDayHolidayData.name]
-  pgClient.query(queryStatement, queryArrayData).then(singleHoliday => {
-    let holidayResults = singleHoliday.rows[0];
-    // console.log(holidayResults);
-
-    //render editHoliday.ejs, send information from db
-    response.render('./pages/editHoliday', { infoToUpdate: holidayResults })
-  })
+  const queryArrayData = [param.holiday_name]
+  pgClient.query(queryStatement, queryArrayData)
+    .then(singleHoliday => {
+      let holidayResults = singleHoliday.rows[0];
+      // console.log('pulling: ',holidayResults, 'from db');
+      response.render('./pages/editHoliday', { renderData: holidayResults })
+    })
 }
 
 
 function updateHolidayInfo(request, response) {
-  //line 101 may be incorrect, depending on how the data is received
-  const day_num = request.params.body.day
-
-  //this line may not work, depends on how we are receiving the data from form
+  console.log('we got to 268')
+  const param = request.params;
+  const day=param.day_num;
+  const month=param.month_num;
+  const year=param.year_num;
+  console.log('request body is: ', request.body)
   const updatedInfo = request.body
-  //not sure how to capture the month/year from all of this
-  const sqlUpdatestatment = 'UPDATE holidays SET name=$1, day=$2, type=$3, description=$4'
-  const sqlUpdateArray = [updatedInfo.name, day_num, updatedInfo.type, updatedInfo.description]
+  const sqlUpdatestatment = 'UPDATE holidays SET name=$1, type=$2, description=$3 WHERE id=$4'
+  const sqlUpdateArray = [updatedInfo.name, updatedInfo.type, updatedInfo.description, param.holiday_id]
+  // console.log('sqlUpdateArray is: ', sqlUpdateArray)
 
   //save updated information to the database
   pgClient.query(sqlUpdatestatment, sqlUpdateArray).then(updatedInfo => {
-    response.redirect(`/${day_num}`)
+    response.redirect(`/day/${year}/${month}/${day}`)
   })
 }
 
