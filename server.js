@@ -142,10 +142,10 @@ function getOneDayHolidays(request, response) {
   let params = request.params
   //   console.log('params is: ', params)
 
+  let date = new Date().toString().slice(0, 10)
   const year_num = params.year_num;
   const month_num = params.month_num;
   const day_num = params.day_num;
-  let date = new Date().toString().slice(0, 10)
 
   //find all things for specified day/month/year
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
@@ -173,34 +173,79 @@ function getOneDayHolidays(request, response) {
 
 
 function addHoliday(request, response) {
-  const params = request.params;
+  const param = request.params;
+  console.log(param);
   const dateObject = {
-    year: params.year_num,
-    month: params.month_num,
-    day: params.day
+    year: param.year_num,
+    month: param.month_num,
+    day: param.day_num
   }
-  //   console.log(dateObject.year)
-  //   console.log('params', request.params)
+  console.log(dateObject.year)
+  console.log('params', request.params)
   response.render('pages/newHoliday', { renderData: dateObject })
 }
 
 
 function saveHoliday(request, response) {
   console.log('in this great holiday');
+  // console.log(request.body)
+
   // adds an event to the selected day
   //line 87 may not work, depending on how the data is received
-  //   const day_num = request;
-  console.log(request.params)
-  const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5);'
+  const formData = request.body;
+  const name = formData.name;
+  const year = formData.year;
+  const month = formData.month;
+  const day = formData.day;
 
-  //   insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
-  const queryArray = [formdata.name, formdata.month, formdata.year, formdata.day, formdata.type, formdata.description];
+  const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5, $6);'
+
+  //   //   insertArray will be incorrect, easily fixed when receiving form data (will not be formdata variable name)
+  const queryArray = [formData.name, formData.month, formData.year, formData.day, formData.type, formData.description];
 
   pgClient.query(sqlInsert, queryArray).then(oneDayHolidays => {
-    response.render('/oneDay', { oneDayHolidays: day_num })
+    let date = new Date().toString().slice(0, 10)
+    //   console.log('params is: ', params)
 
+    //find all things for specified day/month/year
+    let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
+    let sqlValues = [day, month, year]
+    pgClient.query(sql, sqlValues).then(oneDayHolidays => {
+      // console.log('results fromdb are: ',oneDayHolidays)
+
+
+      let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
+        let regex = / /g
+        let newHolidayname = value.name.replace(regex, '_')
+        return newHolidayname
+      })
+      // console.log('this is pathFriendlyHolidayNames array: ', pathFriendlyHolidayNames)
+
+      response.render('./pages/oneDay', {
+        renderData: [
+          { holidays: oneDayHolidays.rows },
+          { dayHeader: date },
+          { pathFriendlyHolidayNames: pathFriendlyHolidayNames }
+        ]
+      })
+    })
   })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function changeHolidayInfo(request, response) {
   //identify which holiday user clicked on
