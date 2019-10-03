@@ -85,15 +85,15 @@ function getCalendar(request, response){
         return new Promise(resolve => resolve());
       }
     })
-    .then(() => {
-      // Otherwise delete then create DB
-      const dropSql = 'DROP TABLE IF EXISTS holidays;';
-      const createSql = 'CREATE TABLE holidays (id SERIAL PRIMARY KEY, name VARCHAR(255), year INTEGER, month INTEGER, day INTEGER, type VARCHAR(255), description VARCHAR(511));';
-      return Promise.all([
-        pgClient.query(dropSql),
-        pgClient.query(createSql)
-      ]);
-    })
+    // .then(() => {
+    //   // Otherwise delete then create DB
+    //   const dropSql = 'DROP TABLE IF EXISTS holidays;';
+    //   const createSql = 'CREATE TABLE holidays (id SERIAL PRIMARY KEY, name VARCHAR(255), year INTEGER, month INTEGER, day INTEGER, type VARCHAR(255), description VARCHAR(511));';
+    //   return Promise.all([
+    //     pgClient.query(dropSql),
+    //     pgClient.query(createSql)
+    //   ]);
+    // })
     .then(() => {
       // Read Calendarific API holidays data
       const date = new Date();

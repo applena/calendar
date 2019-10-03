@@ -1,6 +1,74 @@
-# calendar
+# Holiday Calendar<br>
 
-## Time logs
+Created By:
+
+Enrique Rivera<br>
+Chris Ceder<br>
+Ethan Davis<br>
+Zerek Cover<br>
+___
+
+
+
+### Description
+Our app generates a calendar-like view that contains api-derived holidays, and any user-added hoildays (if any) for the current month (of October, wooh!)
+___
+
+### Problem Domain
+There are many calendars out there, but most of them fail to showcase major foreign , lesser-celebrated, and religion-based holidays.<br>
+
+We identified this gap, and created an app that will cater to people who want to see these less-recognized holidays as well as major holidays in one central location.
+
+It is also a great way for people to read a breif description of holidays they are not informed of, that those in their workplace or community may celebrate.
+___
+Version Schemes
+
+```
+0.0.1
+"Our pitch for Calendar project was approved by Big Boss Lena-chan"
+
+0.9(beta)
+File scaffolding created -Ethan
+
+0.9.1
+basic routes -Zerek/Ethan
+basic ejs -Chris/Enrique
+
+0.9.2
+Api queried -Ethan
+
+0.9.3
+Api Results saved to psql -Ethan
+
+0.9.3
+Home route generates list of holidays for one month
+
+0.9.4
+Other routes tested, work with forced data
+
+0.9.5
+Basic CSS for home page mobile and desktop created -Enrique
+
+0.9.501
+Restructured CSS for home page, only mobile -Ethan
+
+0.9.6
+Routes work as intended, combining with home route (fingers crossed)
+
+0.9.7
+Home route cleanly joins other routes, with removal of day of week (ex: Sun)
+
+0.9.8
+Home route has bug with other routes if no holiday on selected day.
+
+
+1.0.0
+MVP logic met, pushing forward with visual
+
+
+```
+___
+
 
 ### Wireframes
 
