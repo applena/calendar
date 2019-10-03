@@ -153,7 +153,6 @@ function getOneDayHolidays(request, response) {
   pgClient.query(sql, sqlValues).then(oneDayHolidays => {
     // console.log('results fromdb are: ',oneDayHolidays)
 
-
     let pathFriendlyHolidayNames = oneDayHolidays.rows.map(value => {
       let regex = / /g
       let newHolidayname = value.name.replace(regex, '_')
