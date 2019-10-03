@@ -15,6 +15,13 @@
         <article>
             <% renderData[0].holidays.forEach(holiday => { %>
                 <p><a href="/day/<%=holiday.year%>/<%=holiday.month%>/<%=holiday.day%>/<%=holiday.name%>/change"><%= holiday.name %></a></p>
+                <p>weare going to: /day/<%=holiday.year%>/<%=holiday.month%>/<%=holiday.day%>/<%=holiday.name%>/change</p>
+                
+                <p>year is <%=holiday.year%></p>
+                <p>month is <%=holiday.month%></p>
+
+                <p>day is <%=holiday.day%></p>
+
             <% }) %>
         </article>
     </main>

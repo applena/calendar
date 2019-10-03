@@ -177,6 +177,7 @@ function getOneDayHolidays(request, response){
   const year_num = params.year_num;
   const month_num = params.month_num;
   const day_num = params.day_num;
+  console.log('day is: ', day_num)
   let sql = 'SELECT * FROM holidays WHERE day=$1 AND month=$2 AND year=$3';
   let sqlValues = [day_num, month_num, year_num]
   pgClient.query(sql, sqlValues).then(oneDayHolidays => {
@@ -200,9 +201,9 @@ function getOneDayHolidays(request, response){
         renderData: [
           {
             holidays: [{
-              year: new Date().getFullYear(),
-              month: new Date().getMonth() + 1,
-              day: new Date().getDate()
+              year: year_num,
+              month: month_num,
+              day: day_num
             }]
           },
           {
@@ -226,6 +227,7 @@ function addHoliday(request, response){
     month: param.month_num,
     day: param.day_num
   }
+  console.log('day is: ', dateObject.day)
   response.render('pages/newHoliday', { renderData: dateObject })
 }
 // Saves new holiday information from newHoliday page
@@ -235,6 +237,7 @@ function saveNewHoliday(request, response){
   const year = formData.year;
   const month = formData.month;
   const day = formData.day;
+  console.log('sending info to day no. : ', day)
   const sqlInsert = 'INSERT INTO holidays (name, month, year, day, type, description) VALUES ($1, $2, $3, $4, $5, $6);'
   const queryArray = [formData.name, formData.month, formData.year, formData.day, formData.type, formData.description];
 
