@@ -21,8 +21,41 @@ main {
     padding: 2em;
 }
 
-.link {
+nav {
+    text-align: center;
+}
+
+nav>ul>li {
     display: inline-block;
+    text-align: center;
+}
+
+.links {
+    color: black;
+    align-content: center;
+    padding: 10px;
+}
+
+.website_header_footer {
+    text-align: center;
+}
+
+.days {
+    border: 5px solid red;
+    padding: 2%;
+    margin-bottom: 10px;
+}
+
+.header {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+.add-link {
+    color: black;
+    background-color: rgb(235, 221, 221);
+    border: solid green 5px;
+    margin: 10px;
 }
 
 
