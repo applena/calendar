@@ -9,18 +9,15 @@
     <header>
         <%- include('../partials/header') %>
     </header>
-    <main>
+    <main id="viewbox">
         <form id="save-form" action="/day/<%=renderData.year%>/<%=renderData.month%>/<%=renderData.day%>/<%=renderData.id%>/update" method="POST">
             <fieldset>
-                <p>something</p>
                 <input type="text" name="name" value="<%=renderData.name%>">
                 <input type="text" name="type" value="<%=renderData.type%>">
                 <textarea type="text" name="description" placeholder="<%=renderData.description%>" cols="30" rows="10"></textarea>
 
 
-                <p>button of form below</p>
                 <input type="submit" value="Save Changes">
-                <p>button of form above</p>
 
             </fieldset>
         </form>
