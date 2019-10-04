@@ -45,6 +45,8 @@ const api = new API();
  */
 // Home page, month Calendar
 app.get('/', getCalendar);
+// Go to About us Page
+app.get('/aboutUs', getAboutUs)
 // View one specific day, and show holidays for that day
 app.get('/day/:year_num/:month_num/:day_num', getOneDayHolidays);// Done-ZC
 // Add a new holiday for specified day
@@ -127,6 +129,11 @@ function getCalendar(request, response){
       getCalendarHelper(holidays, response);
     })
     .catch(err => new Error(err).exit(response));
+}
+
+// View About Us
+function getAboutUs(request, response){
+  response.render('./pages/aboutUs')
 }
 
 
