@@ -11,11 +11,27 @@
     </header>
 
     <main>
-        <a class="forms-links" href="/day/<%=renderData[0].holidays[0].year%>/<%=renderData[0].holidays[0].month%>/<%=renderData[0].holidays[0].day%>/add">add holiday</a>
+        <h2 class="header">
+            <%=renderData[0].holidays[0].month%>/
+                <%=renderData[0].holidays[0].day%>/
+                    <%=renderData[0].holidays[0].year%>
+        </h2>
+
+        <a class="add-link" href="/day/<%=renderData[0].holidays[0].year%>/<%=renderData[0].holidays[0].month%>/<%=renderData[0].holidays[0].day%>/add">add holiday</a>
         <article>
             <% renderData[0].holidays.forEach(holiday => { %>
-                <p><a href="/day/<%=holiday.year%>/<%=holiday.month%>/<%=holiday.day%>/<%=holiday.name%>/change"><%= holiday.name %></a></p>
-            <% }) %>
+                <article class="days">
+                    <p>
+                        <a href="/day/<%=holiday.year%>/<%=holiday.month%>/<%=holiday.day%>/<%=holiday.name%>/change">
+                            <%= holiday.name %>
+                        </a>
+                    </p>
+
+                    <p>
+                        <%= holiday.description %>
+                    </p>
+                </article>
+                <% }) %>
         </article>
     </main>
 
