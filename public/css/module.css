@@ -1,4 +1,24 @@
 
+.about_us_description {
+  margin-bottom: 1em;
+}
+
+.about_us_name {
+  font-size: 18pt;
+  margin-bottom: 0.5em;
+  margin-top: 1em;
+}
+
+.about_us_img {
+  border: solid #111 1em;
+  margin: 0.125em;
+}
+
+.about_us_page_title {
+  font-size: 24pt;
+  margin-bottom: 1em;
+}
+
 .day_header {
   font-size: 20pt;
   margin-bottom: 1em;
