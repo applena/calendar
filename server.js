@@ -83,6 +83,9 @@ function getCalendar(request, response){
       // If Holidays in DB and Holidays are for current month return Holidays to client
       if (holidays[0] && holidays[0].month === new Date().getMonth() + 1) {
         getCalendarHelper(holidays, response);
+        return new Promise((resolve, reject) => {
+          reject('OK holidays');
+        })
       } else {
         return new Promise(resolve => resolve());
       }
@@ -128,7 +131,15 @@ function getCalendar(request, response){
       const holidays = sqlRes.rows;
       getCalendarHelper(holidays, response);
     })
-    .catch(err => new Error(err).exit(response));
+    .catch(err => {
+      switch (err) {
+      case 'OK holiday':
+        break;
+      default:
+        new Error(err).exit(response);
+        break;
+      }
+    });
 }
 
 // View About Us
@@ -168,9 +179,9 @@ function getOneDayHolidays(request, response){
         renderData: [
           {
             holidays: [{
-              year: new Date().getFullYear(),
-              month: new Date().getMonth() + 1,
-              day: new Date().getDate()
+              year: year_num,
+              month: month_num,
+              day: day_num
             }]
           },
           {
@@ -267,7 +278,7 @@ function deleteHolidayInfo(request, response){
 
 function getCalendarHelper(holidays, response) {
   // const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  let calendarDays = new Array(31).fill({});
+  let calendarDays = new Array(new Date(new Date().getFullYear(), new Date().getMonth(), 0).getDate()).fill({});
   calendarDays = calendarDays.map((calendarDay, index) => {
     const holiday = holidays.find(holiday => {
       return holiday.day === index + 1;
